@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://tizen.org/ns/packages" api-version="6.5" package="com.companyname.tizentv" version="1.0.0">
+    <author>Company Name</author>
+    <description>Tizen TV App with .NET MAUI</description>
+    <profile name="tv" />
+    <ui-application appid="com.companyname.tizentv"
+                    exec="TizenTVApp.dll"
+                    type="dotnet"
+                    multiple="false"
+                    taskmanage="true"
+                    nodisplay="false"
+                    launch_mode="single">
+        <label>TizenTVApp</label>
+        <icon>tizen-icon.png</icon>
+        <metadata key="http://tizen.org/metadata/prefer_dotnet_aot" value="true" />
+    </ui-application>
+    <privileges>
+        <privilege>http://tizen.org/privilege/internet</privilege>
+        <privilege>http://tizen.org/privilege/network.get</privilege>
+        <privilege>http://tizen.org/privilege/mediacontroller.client</privilege>
+    </privileges>
+    <provides-appdefined-privileges />
+</manifest>
