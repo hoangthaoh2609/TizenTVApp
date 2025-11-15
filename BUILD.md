@@ -14,17 +14,17 @@ This is a .NET 8 MAUI application targeting Samsung Tizen TVs, Android, and iOS.
 Install the following .NET workloads:
 
 ```bash
-# MAUI workload
+# MAUI workload (includes core MAUI support)
 dotnet workload install maui
 
-# Tizen workload
-dotnet workload install tizen
+# Tizen workload (required for Tizen TV development)
+dotnet workload install maui-tizen
 
 # Optional: Android workload (if building for Android)
-dotnet workload install android
+dotnet workload install maui-android
 
 # Optional: iOS workload (if building for iOS on macOS)
-dotnet workload install ios
+dotnet workload install maui-ios
 ```
 
 ### Tizen SDK Setup
@@ -171,7 +171,9 @@ TizenTVApp/
 ### Build Errors
 
 **Error: NETSDK1139 - Target platform 'tizen' not recognized**
-- Install Tizen workload: `dotnet workload install tizen`
+- Install MAUI Tizen workload: `dotnet workload install maui-tizen`
+- Install base MAUI workload: `dotnet workload install maui`
+- Ensure .NET 8 SDK is installed (check with `dotnet --version`)
 - Ensure Tizen Studio is installed
 
 **Error: Cannot find Tizen.NET package**
