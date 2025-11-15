@@ -34,7 +34,7 @@ See [BUILD.md](BUILD.md) for detailed build and deployment instructions.
 
 ```bash
 # Install workloads
-dotnet workload install maui tizen
+dotnet workload install maui maui-tizen
 
 # Restore packages
 dotnet restore
