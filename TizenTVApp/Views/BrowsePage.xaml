@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TizenTVApp.ViewModels"
+             xmlns:models="clr-namespace:TizenTVApp.Models"
+             x:Class="TizenTVApp.Views.BrowsePage"
+             x:DataType="vm:BrowseViewModel"
+             BackgroundColor="{StaticResource Background}">
+
+    <Grid Padding="40" RowSpacing="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnSpacing="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Text="← Back"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Command="{Binding GoBackCommand}"
+                    WidthRequest="150" />
+
+            <Label Grid.Column="1"
+                   Text="{Binding Category}"
+                   Style="{StaticResource HeaderLabelStyle}"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Search Bar -->
+        <Grid Grid.Row="1" ColumnSpacing="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Entry Grid.Column="0"
+                   Text="{Binding SearchQuery}"
+                   Placeholder="Search..."
+                   TextColor="{StaticResource TextPrimary}"
+                   PlaceholderColor="{StaticResource TextSecondary}"
+                   BackgroundColor="{StaticResource Surface}"
+                   FontSize="28"
+                   HeightRequest="70" />
+
+            <Button Grid.Column="1"
+                    Text="Search"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Command="{Binding SearchCommand}"
+                    WidthRequest="200" />
+        </Grid>
+
+        <!-- Content Grid -->
+        <ScrollView Grid.Row="2">
+            <CollectionView ItemsSource="{Binding Content}"
+                           SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                   Span="3"
+                                   HorizontalItemSpacing="20"
+                                   VerticalItemSpacing="20" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:VideoContent">
+                        <Frame Style="{StaticResource VideoCardFrameStyle}">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BrowseViewModel}}, Path=PlayVideoCommand}"
+                                    CommandParameter="{Binding}" />
+                            </Frame.GestureRecognizers>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Thumbnail placeholder -->
+                                <BoxView Grid.Row="0"
+                                        Color="{StaticResource SurfaceDark}"
+                                        CornerRadius="8" />
+
+                                <!-- Content Info -->
+                                <VerticalStackLayout Grid.Row="1"
+                                                    Padding="15"
+                                                    Spacing="5">
+                                    <Label Text="{Binding Title}"
+                                          Style="{StaticResource BodyLabelStyle}"
+                                          LineBreakMode="TailTruncation"
+                                          MaxLines="2" />
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding Year}"
+                                              Style="{StaticResource MetadataLabelStyle}" />
+                                        <Label Text="•"
+                                              Style="{StaticResource MetadataLabelStyle}" />
+                                        <Label Text="{Binding FormattedDuration}"
+                                              Style="{StaticResource MetadataLabelStyle}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="2"
+                          IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          Style="{StaticResource LoadingIndicatorStyle}"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center" />
+
+        <!-- Empty State -->
+        <VerticalStackLayout Grid.Row="2"
+                            IsVisible="{Binding Content.Count, Converter={StaticResource IsZeroConverter}}"
+                            Spacing="20"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+            <Label Text="No content found"
+                   Style="{StaticResource TitleLabelStyle}"
+                   HorizontalOptions="Center" />
+            <Label Text="Try adjusting your search or browse a different category"
+                   Style="{StaticResource BodyLabelStyle}"
+                   HorizontalOptions="Center" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

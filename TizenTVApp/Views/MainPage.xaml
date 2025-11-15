@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TizenTVApp.ViewModels"
+             xmlns:models="clr-namespace:TizenTVApp.Models"
+             x:Class="TizenTVApp.Views.MainPage"
+             x:DataType="vm:MainViewModel"
+             BackgroundColor="{StaticResource Background}">
+
+    <Grid Padding="40" RowSpacing="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Label Grid.Row="0"
+               Text="Tizen TV App"
+               Style="{StaticResource HeaderLabelStyle}" />
+
+        <!-- Categories -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Categories}"
+                        SelectionMode="Single"
+                        HeightRequest="100">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                    <Button Text="{Binding}"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BrowseCategoryCommand}"
+                            CommandParameter="{Binding}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Featured Content -->
+        <ScrollView Grid.Row="2">
+            <VerticalStackLayout Spacing="20">
+                <Label Text="Featured"
+                       Style="{StaticResource TitleLabelStyle}"
+                       Margin="0,20,0,0" />
+
+                <CollectionView ItemsSource="{Binding FeaturedContent}"
+                                SelectionMode="Single"
+                                HeightRequest="350">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="20" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:VideoContent">
+                            <Frame Style="{StaticResource VideoCardFrameStyle}">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=PlayVideoCommand}"
+                                        CommandParameter="{Binding}" />
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Thumbnail placeholder -->
+                                    <BoxView Grid.Row="0"
+                                             Color="{StaticResource SurfaceDark}"
+                                             CornerRadius="8" />
+
+                                    <!-- Content Info -->
+                                    <VerticalStackLayout Grid.Row="1"
+                                                         Padding="15"
+                                                         Spacing="5">
+                                        <Label Text="{Binding Title}"
+                                               Style="{StaticResource BodyLabelStyle}"
+                                               LineBreakMode="TailTruncation"
+                                               MaxLines="1" />
+                                        <Label Text="{Binding FormattedDuration}"
+                                               Style="{StaticResource MetadataLabelStyle}" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- Loading Indicator -->
+        <ActivityIndicator Grid.Row="2"
+                          IsRunning="{Binding IsLoading}"
+                          IsVisible="{Binding IsLoading}"
+                          Style="{StaticResource LoadingIndicatorStyle}"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center" />
+    </Grid>
+
+</ContentPage>
